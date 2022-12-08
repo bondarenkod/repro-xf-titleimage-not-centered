@@ -2,12 +2,21 @@
 using System.ComponentModel;
 using Android.Content;
 using Android.OS;
-using Android.Views;
-using Android.Widget;
+#if __ANDROID_29__
 using AndroidX.Core.View;
 using AndroidX.Core.Widget;
 using AndroidX.RecyclerView.Widget;
 using AndroidX.SwipeRefreshLayout.Widget;
+using AndroidX.AppCompat.Widget;
+using static AndroidX.RecyclerView.Widget.RecyclerView;
+#else
+using Android.Support.V4.Widget;
+using Android.Support.V4.View;
+using Android.Support.V7.Widget;
+using static Android.Support.V7.Widget.RecyclerView;
+#endif
+using Android.Views;
+using Android.Widget;
 using Xamarin.Forms.Internals;
 using AView = Android.Views.View;
 using AWebView = Android.Webkit.WebView;
@@ -185,7 +194,7 @@ namespace Xamarin.Forms.Platform.Android
 			}
 
 			if (view is RecyclerView recyclerView)
-				return recyclerView.ComputeVerticalScrollOffset() > 0;
+				return CanScrollUpRecyclerView(recyclerView);
 
 			if (view is NestedScrollView nestedScrollView)
 				return nestedScrollView.ComputeVerticalScrollOffset() > 0;
@@ -194,6 +203,21 @@ namespace Xamarin.Forms.Platform.Android
 				return webView.ScrollY > 0;
 
 			return true;
+		}
+		
+		///
+		/// added fix from https://github.com/xamarin/Xamarin.Forms/pull/12982/files
+		///
+		bool CanScrollUpRecyclerView(RecyclerView recyclerView)
+		{
+			if (!(recyclerView.GetLayoutManager() is LinearLayoutManager layoutManager))
+				return recyclerView.ComputeVerticalScrollOffset() > 0;
+
+			int position = layoutManager.FindFirstVisibleItemPosition();
+			ViewHolder mViewHolder = recyclerView.FindViewHolderForAdapterPosition(position);
+			var item = mViewHolder?.ItemView;
+
+			return item != null && (int)item.GetY() > 0;
 		}
 
 		public void OnRefresh()

@@ -415,6 +415,8 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		protected virtual void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
+			if (!Foundation.NSThread.Current.IsMainThread)
+                throw new InvalidOperationException($"you should call ipnc from UI thread only, property=[{e.PropertyName}]");				
 			if (e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
 				SetBackgroundColor(Element.BackgroundColor);
 			else if (e.PropertyName == VisualElement.BackgroundProperty.PropertyName)

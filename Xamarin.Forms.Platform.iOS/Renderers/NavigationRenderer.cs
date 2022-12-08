@@ -371,7 +371,11 @@ namespace Xamarin.Forms.Platform.iOS
 			}
 		}
 
-
+		protected virtual UIBarButtonItem ToUIBarButtonItem(ToolbarItem item, bool forceName = false)
+		{
+			return item.ToUIBarButtonItem(forceName);
+		}
+		
 		ParentingViewController CreateViewControllerForPage(Page page)
 		{
 			if (Platform.GetRenderer(page) == null)
@@ -1421,12 +1425,15 @@ namespace Xamarin.Forms.Platform.iOS
 				List<UIBarButtonItem> primaries = null;
 				List<UIBarButtonItem> secondaries = null;
 				var toolbarItems = _tracker.ToolbarItems;
-				foreach (var item in toolbarItems)
+				if (_navigation.TryGetTarget(out var navRenderer))
 				{
-					if (item.Order == ToolbarItemOrder.Secondary)
-						(secondaries = secondaries ?? new List<UIBarButtonItem>()).Add(item.ToUIBarButtonItem(true));
-					else
-						(primaries = primaries ?? new List<UIBarButtonItem>()).Add(item.ToUIBarButtonItem());
+					foreach (var item in toolbarItems)
+					{
+						if (item.Order == ToolbarItemOrder.Secondary)
+							(secondaries = secondaries ?? new List<UIBarButtonItem>()).Add(navRenderer.ToUIBarButtonItem(item, true));
+						else
+							(primaries = primaries ?? new List<UIBarButtonItem>()).Add(navRenderer.ToUIBarButtonItem(item));
+					}
 				}
 
 				if (primaries != null)

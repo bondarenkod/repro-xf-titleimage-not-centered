@@ -405,7 +405,18 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 
 				if (width > 0 && height > 0)
 				{
-					PageController.ContainerArea = new Rectangle(0, 0, context.FromPixels(width), context.FromPixels(height - _bottomNavigationView.MeasuredHeight));
+					if (_bottomNavigationView.Visibility == ViewStates.Visible)
+					{
+						PageController.ContainerArea = new Rectangle(0, 0, context.FromPixels(width),
+							context.FromPixels(height - _bottomNavigationView.MeasuredHeight));
+						SetNavigationRendererPadding(0, _bottomNavigationView.MeasuredHeight);
+					}
+					else
+					{
+						PageController.ContainerArea = new Rectangle(0, 0, context.FromPixels(width),
+							context.FromPixels(height));
+						SetNavigationRendererPadding(0, 0);
+					}
 
 					SetNavigationRendererPadding(0, _bottomNavigationView.MeasuredHeight);
 
