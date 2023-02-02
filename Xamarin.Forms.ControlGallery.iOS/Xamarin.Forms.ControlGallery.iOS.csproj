@@ -77,7 +77,7 @@
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchOptimizePNGs>True</MtouchOptimizePNGs>
     <MtouchI18n>mideast</MtouchI18n>
-    <BuildIpa>True</BuildIpa>
+    <BuildIpa>false</BuildIpa>
     <IpaMetadata />
     <IpaPackageName />
     <CodesignProvision>Automatic</CodesignProvision>
