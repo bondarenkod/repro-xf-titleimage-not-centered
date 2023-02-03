@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreGraphics;
@@ -375,7 +376,7 @@ namespace Xamarin.Forms.Platform.iOS
 		{
 			return item.ToUIBarButtonItem(forceName);
 		}
-		
+
 		ParentingViewController CreateViewControllerForPage(Page page)
 		{
 			if (Platform.GetRenderer(page) == null)
@@ -455,7 +456,7 @@ namespace Xamarin.Forms.Platform.iOS
 			else if (e.PropertyName == NavigationPage.BarBackgroundColorProperty.PropertyName ||
 				e.PropertyName == NavigationPage.BarBackgroundProperty.PropertyName)
 			{
-				UpdateBarBackground();		
+				UpdateBarBackground();
 				UpdateHideNavigationBarSeparator();
 			}
 			else if (e.PropertyName == NavigationPage.BarTextColorProperty.PropertyName
@@ -872,7 +873,7 @@ namespace Xamarin.Forms.Platform.iOS
 					}
 				}
 
-				if(icon == null || containerController.NavigationItem.LeftBarButtonItem == null)
+				if (icon == null || containerController.NavigationItem.LeftBarButtonItem == null)
 				{
 					containerController.NavigationItem.LeftBarButtonItem = new UIBarButtonItem(FlyoutPage.Flyout.Title, UIBarButtonItemStyle.Plain, OnItemTapped);
 				}
@@ -1704,8 +1705,27 @@ namespace Xamarin.Forms.Platform.iOS
 				}
 				else if (_icon != null && Superview != null)
 				{
-					_icon.Center = new PointF(Superview.Frame.Width / 2 - Frame.X, Superview.Frame.Height / 2);
+					// get bar's parent container size
+					// size of bar is dynamic regards of having a toolbar buttons or not
+					var leftMargin = this.Superview.Frame.X; // should be of _UINavigationBarTitleControl
+					_icon.Center = new PointF(_bar.Superview.Center.X - leftMargin, Superview.Frame.Height / 2);
+
+					DumpLayout(this);
 				}
+			}
+
+			[Conditional("DEBUG")]
+			private void DumpLayout(UIView view)
+			{
+				var parent = view;
+
+				while (parent != null)
+				{
+					Debug.WriteLine($"{parent.ToString()} - {parent.Frame} - {parent.Bounds}");
+					parent = parent.Superview;
+				}
+
+				Debug.WriteLine($"-------------------------------------------------------");
 			}
 
 			protected override void Dispose(bool disposing)
