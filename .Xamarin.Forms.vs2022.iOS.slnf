@@ -4,7 +4,9 @@
     "projects": [
       "Stubs\\Xamarin.Forms.Platform.iOS\\Xamarin.Forms.Platform.iOS (Forwarders).csproj",
       "Xamarin.Forms.Build.Tasks\\Xamarin.Forms.Build.Tasks.csproj",
+      "Xamarin.Forms.ControlGallery.iOS\\Xamarin.Forms.ControlGallery.iOS.csproj",
       "Xamarin.Forms.Controls.Issues\\Xamarin.Forms.Controls.Issues.Shared\\Xamarin.Forms.Controls.Issues.Shared.shproj",
+      "Xamarin.Forms.Controls\\Xamarin.Forms.Controls.csproj",
       "Xamarin.Forms.Core.Design\\Xamarin.Forms.Core.Design.csproj",
       "Xamarin.Forms.Core\\Xamarin.Forms.Core.csproj",
       "Xamarin.Forms.CustomAttributes\\Xamarin.Forms.CustomAttributes.csproj",
