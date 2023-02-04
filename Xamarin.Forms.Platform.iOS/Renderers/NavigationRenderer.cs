@@ -1705,12 +1705,17 @@ namespace Xamarin.Forms.Platform.iOS
 				}
 				else if (_icon != null && Superview != null)
 				{
-					// get bar's parent container size
-					// size of bar is dynamic regards of having a toolbar buttons or not
-					var leftMargin = this.Superview.Frame.X; // should be of _UINavigationBarTitleControl
-					_icon.Center = new PointF(_bar.Superview.Center.X - leftMargin, Superview.Frame.Height / 2);
+					if (Forms.IsiOS16OrNewer)
+					{
+						// get bar's parent container size
+						// size of bar is dynamic regards of having a toolbar buttons or not
+						var leftMargin = this.Superview.Frame.X; // should be of _UINavigationBarTitleControl
+						_icon.Center = new PointF(_bar.Superview.Center.X - leftMargin, Superview.Frame.Height / 2);
 
-					DumpLayout(this);
+						DumpLayout(this);
+					}
+					else
+						_icon.Center = new PointF(Superview.Frame.Width / 2 - Frame.X, Superview.Frame.Height / 2);
 				}
 			}
 
