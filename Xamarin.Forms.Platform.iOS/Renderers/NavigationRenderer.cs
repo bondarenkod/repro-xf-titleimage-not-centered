@@ -1699,9 +1699,16 @@ namespace Xamarin.Forms.Platform.iOS
 
 				if (_child?.Element != null)
 				{
+					this.BackgroundColor = UIColor.Orange;
+
 					Rectangle layoutBounds = new Rectangle(IconWidth, 0, Bounds.Width - IconWidth, height);
 					if (_child.Element.Bounds != layoutBounds)
+					{
 						Layout.LayoutChildIntoBoundingRegion(_child.Element, layoutBounds);
+
+						var leftMargin = this.Superview.Frame.X; // should be of _UINavigationBarTitleControl
+						_child.NativeView.Center = new PointF(_bar.Superview.Center.X - leftMargin, Superview.Frame.Height / 2);
+					}
 				}
 				else if (_icon != null && Superview != null)
 				{
